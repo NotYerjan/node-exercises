@@ -1,7 +1,21 @@
-const { writeFile } = require("node:fs");
+function luckyDraw(player) {
+  return new Promise((resolve, reject) => {
+    const win = Boolean(Math.round(Math.random()));
 
-const data = "Hello World";
-writeFile("message.txt", data, (err) => {
-  if (err) throw err;
-  console.log("The file has been saved!");
-});
+    process.nextTick(() => {
+      if (win) {
+        resolve(`${player} won a prize in the draw!`);
+      } else {
+        reject(new Error(`${player} lost the draw.`));
+      }
+    });
+  });
+}
+
+const players = ["Joe", "Caroline", "Sabrina"];
+
+players.map((player) =>
+  luckyDraw(player)
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err.message))
+);
