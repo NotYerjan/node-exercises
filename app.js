@@ -12,10 +12,16 @@ function luckyDraw(player) {
   });
 }
 
-const players = ["Joe", "Caroline", "Sabrina"];
-
-players.map((player) =>
-  luckyDraw(player)
+const agetResults = async () => {
+  await luckyDraw("Tina")
     .then((res) => console.log(res))
-    .catch((err) => console.log(err.message))
-);
+    .catch((err) => console.log(err.message));
+  await luckyDraw("Jorge")
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err.message));
+  await luckyDraw("Julien")
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err.message));
+};
+
+agetResults();
