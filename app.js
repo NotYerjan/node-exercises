@@ -1,10 +1,7 @@
-const { createServer } = require("node:http");
+const { writeFile } = require("node:fs");
 
-function createdApp() {
-  return createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "text/html");
-    res.end("Welcome to the World Wide Web!");
-  });
-}
-module.exports = createdApp;
+const data = "Hello World";
+writeFile("message.txt", data, (err) => {
+  if (err) throw err;
+  console.log("The file has been saved!");
+});
