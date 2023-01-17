@@ -1,5 +1,25 @@
 {
   "dependencies": {
-    "figlet": "^1.5.2"
-  }
+    "figlet": "^1.5.2",
+    "jest": "^29.3.1",
+    "supertest": "^6.3.3"
+  },
+  "name": "node-exercises",
+  "version": "1.0.0",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NotYerjan/node-exercises.git"
+  },
+  "author": "yerjan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NotYerjan/node-exercises/issues"
+  },
+  "homepage": "https://github.com/NotYerjan/node-exercises#readme",
+  "description": ""
 }
