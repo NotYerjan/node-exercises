@@ -1,16 +1,49 @@
-require("dotenv").config();
-const express = require("express");
-const app = express();
-const PORT = process.env.PORT;
+// CHALLENGE 1
+const surprisingFact = "The bumblebee bat is the world's smallest mammal";
 
-app.use(express.json());
+console.log(surprisingFact);
+console.dir(surprisingFact);
 
-app.get("/", function (req, res) {
-  res.json({ planet: "earth" });
-});
+//CHALLENGE 2
+const familyTree = [
+  {
+    name: "Person 1",
+    children: [
+      {
+        name: "Person 2",
+        children: [
+          {
+            name: "Person 3",
+            children: [
+              {
+                name: "Person 4",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
 
-app.listen(PORT, () => {
-  console.log(`Listenning to the port http://localhost:${PORT}`);
-});
+console.dir(familyTree, { depth: "all" });
+console.log(JSON.stringify(familyTree));
 
-module.exports = app;
+//CHALLENGE
+let count = 0;
+function importantTask() {
+  if (count < 4) {
+    count += 1;
+  } else {
+    count = 0;
+    console.countReset();
+  }
+  console.count();
+}
+
+importantTask();
+importantTask();
+importantTask();
+importantTask();
+importantTask();
+importantTask();
