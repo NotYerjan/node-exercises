@@ -1,27 +1,16 @@
-function luckyDraw(player) {
-  return new Promise((resolve, reject) => {
-    const win = Boolean(Math.round(Math.random()));
+require("dotenv").config();
+const express = require("express");
+const app = express();
+const PORT = process.env.PORT;
 
-    process.nextTick(() => {
-      if (win) {
-        resolve(`${player} won a prize in the draw!`);
-      } else {
-        reject(new Error(`${player} lost the draw.`));
-      }
-    });
-  });
-}
+app.use(express.json());
 
-const agetResults = async () => {
-  await luckyDraw("Tina")
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err.message));
-  await luckyDraw("Jorge")
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err.message));
-  await luckyDraw("Julien")
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err.message));
-};
+app.get("/", function (req, res) {
+  res.json({ planet: "earth" });
+});
 
-agetResults();
+app.listen(PORT, () => {
+  console.log(`Listenning to the port http://localhost:${PORT}`);
+});
+
+module.exports = app;
