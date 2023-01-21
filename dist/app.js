@@ -39,24 +39,21 @@ const client_1 = require("@prisma/client");
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const express_1 = __importDefault(require("express"));
+const validate_1 = require("./validate");
 const app = (0, express_1.default)();
 const PORT = process.env.PORT;
 const prisma = new client_1.PrismaClient();
 app.use(express_1.default.json());
-app.get("/", (req, res) => {
-    prisma.user
-        .findMany()
-        .then((user) => {
-        res.json(user);
-    })
-        .then(() => __awaiter(void 0, void 0, void 0, function* () {
-        yield prisma.$disconnect();
-    }))
-        .catch((e) => __awaiter(void 0, void 0, void 0, function* () {
-        yield prisma.$disconnect();
-        process.exit(1);
-    }));
-});
+app.get("/users", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const users = yield prisma.user.findMany();
+    res.json(users);
+}));
+app.post("/users", (0, validate_1.validate)({ body: validate_1.userSchema }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield req.body;
+    prisma.user.create({
+        data: user,
+    });
+}));
 app.listen(PORT, () => {
     // tslint:disable-next-line:no-console
     console.log(`server started at http://localhost:${PORT}`);
