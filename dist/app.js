@@ -41,12 +41,19 @@ dotenv.config();
 const express_1 = __importDefault(require("express"));
 const validate_1 = require("./validate");
 const cors_1 = __importDefault(require("cors"));
+const multer_1 = require("./middleware/multer");
+const path_1 = __importDefault(require("path"));
+const express_ejs_layouts_1 = __importDefault(require("express-ejs-layouts"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT;
 const prisma = new client_1.PrismaClient();
 const corsOptions = {
     origin: "http://localhost:8080",
 };
+const upload = (0, multer_1.initMulterMiddleware)();
+app.use(express_ejs_layouts_1.default);
+app.set("views", path_1.default.join(__dirname, "views"));
+app.set("view engine", "ejs");
 app.use(express_1.default.json());
 app.use((0, cors_1.default)(corsOptions));
 app.get("/users", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -97,6 +104,17 @@ app.delete("/user/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         res.status(404);
         next(`Cannot DELETE /laboratories/${userId}`);
     }
+}));
+app.get("/avatar/upload", (req, res) => {
+    res.render("index");
+});
+app.post("/avatar", upload.single("avatar"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.file) {
+        res.status(400);
+        return next("No file uploaded");
+    }
+    const imageName = req.file.filename;
+    res.status(201).json({ imageName });
 }));
 app.listen(PORT, () => {
     // tslint:disable-next-line:no-console

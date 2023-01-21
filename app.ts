@@ -5,6 +5,9 @@ import express from "express";
 import { Request, Response } from "express";
 import { validate, userSchema, UserData } from "./validate";
 import cors from "cors";
+import { initMulterMiddleware } from "./middleware/multer";
+import path from "path";
+import expressLayouts from "express-ejs-layouts";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -12,6 +15,11 @@ const prisma = new PrismaClient();
 const corsOptions = {
   origin: "http://localhost:8080",
 };
+const upload = initMulterMiddleware();
+
+app.use(expressLayouts);
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
 app.use(express.json());
 app.use(cors(corsOptions));
@@ -79,6 +87,25 @@ app.delete("/user/:id", async (req: Request, res: Response, next: any) => {
     next(`Cannot DELETE /laboratories/${userId}`);
   }
 });
+
+app.get("/avatar/upload", (req: Request, res: Response) => {
+  res.render("index");
+});
+
+app.post(
+  "/avatar",
+  upload.single("avatar"),
+  async (req: Request, res: Response, next: any) => {
+    if (!req.file) {
+      res.status(400);
+      return next("No file uploaded");
+    }
+
+    const imageName = req.file.filename;
+
+    res.status(201).json({ imageName });
+  }
+);
 
 app.listen(PORT, () => {
   // tslint:disable-next-line:no-console
