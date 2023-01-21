@@ -40,19 +40,63 @@ const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const express_1 = __importDefault(require("express"));
 const validate_1 = require("./validate");
+const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT;
 const prisma = new client_1.PrismaClient();
+const corsOptions = {
+    origin: "http://localhost:8080",
+};
 app.use(express_1.default.json());
+app.use((0, cors_1.default)(corsOptions));
 app.get("/users", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield prisma.user.findMany();
     res.json(users);
+}));
+app.get("/user/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = Number(req.params.id);
+    const laboratory = yield prisma.user.findUnique({
+        where: { id: userId },
+    });
+    if (!laboratory) {
+        res.status(404);
+        return next(`Cannot GET /laboratories/${userId}`);
+    }
+    res.json(laboratory);
 }));
 app.post("/users", (0, validate_1.validate)({ body: validate_1.userSchema }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield req.body;
     prisma.user.create({
         data: user,
     });
+}));
+app.put("/users/:id", (0, validate_1.validate)({ body: validate_1.userSchema }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = Number(req.params.id);
+    const updatedUser = req.body;
+    try {
+        const user = yield prisma.user.update({
+            where: { id: userId },
+            data: updatedUser,
+        });
+        res.status(200).json(user);
+    }
+    catch (error) {
+        res.status(404);
+        next(`Cannot PUT /laboratories/${userId}`);
+    }
+}));
+app.delete("/user/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = Number(req.params.id);
+    try {
+        yield prisma.user.delete({
+            where: { id: userId },
+        });
+        res.status(204).end();
+    }
+    catch (error) {
+        res.status(404);
+        next(`Cannot DELETE /laboratories/${userId}`);
+    }
 }));
 app.listen(PORT, () => {
     // tslint:disable-next-line:no-console

@@ -4,12 +4,17 @@ dotenv.config();
 import express from "express";
 import { Request, Response } from "express";
 import { validate, userSchema, UserData } from "./validate";
+import cors from "cors";
 
 const app = express();
 const PORT = process.env.PORT;
 const prisma = new PrismaClient();
+const corsOptions = {
+  origin: "http://localhost:8080",
+};
 
 app.use(express.json());
+app.use(cors(corsOptions));
 
 app.get("/users", async (req, res) => {
   const users = await prisma.user.findMany();
