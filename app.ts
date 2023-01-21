@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
+app.get("/users", (req, res) => {
   prisma.user
     .findMany()
     .then((user) => {
