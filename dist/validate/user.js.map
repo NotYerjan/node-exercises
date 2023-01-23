@@ -1,1 +1,0 @@
-{"version":3,"file":"user.js","sourceRoot":"","sources":["../../src/validate/user.ts"],"names":[],"mappings":";;;AAAA,+CAAiD;AAEpC,QAAA,UAAU,GAAG,cAAI,CAAC,MAAM,CACnC;IACE,SAAS,EAAE,cAAI,CAAC,MAAM,EAAE;IACxB,KAAK,EAAE,cAAI,CAAC,KAAK,CAAC,6BAA6B,CAAC;CACjD,EACD,EAAE,oBAAoB,EAAE,KAAK,EAAE,CAChC,CAAC"}
