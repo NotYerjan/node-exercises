@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
+import { checkAuthorization } from "../middleware/passport";
 
 import { validate, userSchema, UserData } from "../validate";
 
@@ -30,6 +31,7 @@ router.get("/:id", async (req: Request, res: Response, next: any) => {
 
 router.post(
   "/",
+  checkAuthorization,
   validate({ body: userSchema }),
   async (req: Request, res: Response) => {
     const user: UserData = await req.body;
@@ -41,6 +43,7 @@ router.post(
 
 router.put(
   "/:id",
+  checkAuthorization,
   validate({ body: userSchema }),
   async (req: Request, res: Response, next: any) => {
     const userId = Number(req.params.id);
@@ -59,17 +62,21 @@ router.put(
   }
 );
 
-router.delete("/:id", async (req: Request, res: Response, next: any) => {
-  const userId = Number(req.params.id);
-  try {
-    await prisma.user.delete({
-      where: { id: userId },
-    });
-    res.status(204).end();
-  } catch (error) {
-    res.status(404);
-    next(`Cannot DELETE /laboratories/${userId}`);
+router.delete(
+  "/:id",
+  checkAuthorization,
+  async (req: Request, res: Response, next: any) => {
+    const userId = Number(req.params.id);
+    try {
+      await prisma.user.delete({
+        where: { id: userId },
+      });
+      res.status(204).end();
+    } catch (error) {
+      res.status(404);
+      next(`Cannot DELETE /laboratories/${userId}`);
+    }
   }
-});
+);
 
 export default router;
