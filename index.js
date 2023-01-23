@@ -1,55 +1,22 @@
-const fs = require("node:fs/promises");
-
-class Logger {
-  constructor(logStorage) {
-    this.logStorage = logStorage;
+class Text {
+  constructor(text) {
+    this.string = text;
   }
 
-  async info(message) {
-    await this.logStorage.write(`[INFO] ${message}\n`);
-  }
-
-  async error(message) {
-    await this.logStorage.write(`[ERROR] ${message}\n`);
-  }
-
-  async replay() {
-    console.log(await this.logStorage.read());
+  toString() {
+    return this.string;
   }
 }
 
-class LogStorageFSAdapter {
-  constructor(filepath) {
-    this.filepath = filepath;
+class Shout {
+  constructor(text) {
+    this.text = text;
   }
-
-  async write(message) {
-    try {
-      await fs.appendFile(this.filepath, `${message}\n`);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async read() {
-    try {
-      return await fs.readFile(this.filepath, { encoding: "utf-8" });
-    } catch (error) {
-      console.error(error);
-    }
+  toString() {
+    return this.text.toString().toUpperCase();
   }
 }
 
-const fsStorage = new LogStorageFSAdapter("output.log");
+console.log(new Text("Hello, I'm talking").toString());
 
-const logger = new Logger(fsStorage);
-
-logger.info("Some information");
-
-logger.error("A bit of an issue");
-
-logger.error("A catastrophic error!");
-
-logger.info("The best information");
-
-logger.replay();
+console.log(new Shout(new Text("Hello, I'm shouting!")).toString());
